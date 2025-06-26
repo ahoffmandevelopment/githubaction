@@ -1,41 +1,36 @@
+# Define the workflow's name
 name: CI Pipeline for Portfolio Website
 
-# This workflow will run on every push to the main branch
+# Specify the event that triggers the workflow
 on:
   push:
     branches:
-      - main
+      - main  # Trigger the workflow on push events to the main branch
 
 # Define the job that will run in the workflow
 jobs:
-  build-and-validate:
-    # Run the job on the latest Ubuntu runner
+  validate-and-check:
+    # Specify the runner environment for the job
     runs-on: ubuntu-latest
-
-    # Steps to be executed in the job
+    
+    # Define the steps to be executed in the job
     steps:
       # Checkout the repository code
       - name: Checkout code
-        uses: actions/checkout@v4
-        # This action checks out your repository under $GITHUB_WORKSPACE, 
-        # so your workflow can access it.
+        uses: actions/checkout@v4  # Use the official checkout action to access the repository code
 
-      # Validate HTML files using the html5validator action
+      # Validate HTML files using the html-validate action
       - name: Validate HTML
-        uses: svenstaro/html5validator-action@v1
-        # This action uses the html5validator Python package to validate 
-        # HTML files according to the W3C standards.
+        uses: chafik/html-validate-action@v1  # Use a pre-built action for HTML validation
         with:
-          root: ./
-          ignore: '.*\.(js|css)$'
+          files: "./**/*.html"  # Specify the pattern for HTML files to validate
+          recursive: true  # Enable recursive search for HTML files
 
-      # Check for broken links using the Lychee action
+      # Check for broken links using the lycheeverse/lychee-action
       - name: Check for broken links
-        uses: lycheeverse/lychee-action@v1.8.0
-        # This action uses Lychee, a fast and simple link checker, to 
-        # scan your files for broken links.
+        uses: lycheeverse/lychee-action@v1.9.3  # Use a pre-built action for link checking
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          LYCHEE_CONFIG: ./
-        # You can customize Lychee's behavior by creating a 
-        # .lychee.toml file in your repository root.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Provide a GitHub token for link checking
+        with:
+          args: --verbose --no-progress *.html  # Specify arguments for link checking
+          fail: true  # Fail the workflow if broken links are found
