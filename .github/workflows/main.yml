@@ -26,8 +26,7 @@ jobs:
         # This action uses the html5validator Python package to validate 
         # HTML files according to the W3C standards.
         with:
-          root: './'
-          args: 'index.html'
+          root: ./
 
       # Check for broken links using the Lychee action
       - name: Check for broken links
