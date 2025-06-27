@@ -27,7 +27,7 @@ jobs:
         # HTML files according to the W3C standards.
         with:
           root: './'
-          files: 'index.html'
+          args: 'index.html'
 
       # Check for broken links using the Lychee action
       - name: Check for broken links
